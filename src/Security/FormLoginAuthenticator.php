@@ -52,7 +52,6 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator implements P
         $credentials = [
             'username' => $request->request->get('username'),
             'password' => $request->request->get('password'),
-            'auth-id' => $request->request->get('auth-id', ''),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
         $request->getSession()->set(
@@ -89,19 +88,7 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator implements P
         $check = $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
 
         if ($check) {
-            HttpClient::create()
-                ->request(Request::METHOD_POST, 'https://sandbox.openbank.icard.dev/authorize/callback', [
-                    'verify_peer' => false,
-                    'verify_host' => false,
-                    'body' => [
-                        'auth-id' => $credentials['auth-id'],
-                        'username' => '+35987894848',
-                        'consent' => [
-                            'BG1234',
-                            'BG324'
-                        ]
-                    ]
-                ])->getInfo();
+            
         }
 
         return $check;
